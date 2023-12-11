@@ -7,17 +7,18 @@ from pages.login_page import LoginPage
 
 @pytest.fixture(scope='session')
 def driver():
-    """Fixture for setting up and closing webdriver in session scope"""
+    """
+    Fixture for setting up and closing webdriver in session scope.
 
-    # Set up the connection
+    Setting:
+     - Set maximum size for window.
+     - Set implicitly wait as 5 seconds.
+    """
+
     driver = webdriver.Firefox()
     driver.maximize_window()
     driver.implicitly_wait(5)
-
-    # Yield the connection
     yield driver
-
-    # close connection
     driver.quit()
 
 
@@ -28,6 +29,6 @@ def login_page(driver) -> LoginPage:
 
 @pytest.fixture()
 def inventory_page(login_page) -> InventoryPage:
-    return login_page \
-        .open_login_page() \
-        .success_login("standard_user", "secret_sauce")
+    return (login_page
+            .open_login_page()
+            .success_login("standard_user", "secret_sauce"))

@@ -1,18 +1,20 @@
 import pytest
 
+from pages.inventory_page import InventoryPage
+
 
 def test_open_login_page(login_page):
-    actual_login_page_title = login_page \
-        .open_login_page() \
-        .title
+    actual_login_page_title = (login_page
+                               .open_login_page()
+                               .title)
     assert actual_login_page_title == "Swag Labs"
 
 
 def test_login_with_valid_credentials(login_page):
-    inventory_page = login_page \
-        .open_login_page() \
-        .success_login("standard_user", "secret_sauce")
-    assert inventory_page.url == inventory_page.inventory_page_url
+    inventory_page: InventoryPage = (login_page
+                                     .open_login_page()
+                                     .success_login("standard_user", "secret_sauce"))
+    assert inventory_page.current_url == inventory_page.inventory_page_url
 
 
 @pytest.mark.parametrize('username, password, error_msg', [
@@ -26,8 +28,8 @@ def test_login_with_valid_credentials(login_page):
 ]
                          )
 def test_login_with_invalid_credentials(username, password, error_msg, login_page):
-    actual_error_msg = login_page \
-        .open_login_page() \
-        .unsuccess_login(username, password) \
-        .error_message
+    actual_error_msg = (login_page
+                        .open_login_page()
+                        .unsuccess_login(username, password)
+                        .error_message)
     assert actual_error_msg == error_msg
