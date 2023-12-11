@@ -53,3 +53,10 @@ class InventoryPage(BasePage):
 
     def get_random_inventory_item(self) -> InventoryItem:
         return random.choice(self.__collected_items())
+
+    def get_inventory_item_by_index(self, index: int) -> Union[InventoryItem, None]:
+        try:
+            return self.__collected_items()[index]
+        except IndexError:
+            print(f"WARNING: Item with index '{index}' not found in Inventory page.")
+            return None
