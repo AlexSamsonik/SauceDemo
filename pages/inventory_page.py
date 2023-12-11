@@ -1,7 +1,7 @@
+import random
 from typing import List, Union
 
 from selenium.webdriver.common.by import By
-from selenium.webdriver.remote.webdriver import WebDriver
 from selenium.webdriver.remote.webelement import WebElement
 
 from pages.base_page import BasePage
@@ -28,6 +28,10 @@ class InventoryItem:
     def price(self) -> str:
         return self.web_element.find_element(*self.price_locator).text
 
+    @property
+    def price_only_number(self) -> str:
+        return self.web_element.find_element(*self.price_locator).text.replace("$", "")
+
 
 class InventoryPage(BasePage):
     # URL
@@ -36,15 +40,8 @@ class InventoryPage(BasePage):
     # Locators
     inventory_items = (By.XPATH, "//div[@class='inventory_list']/div[@class='inventory_item']")
 
-    def __init__(self, driver: WebDriver):
-        super().__init__(driver)
-
-    @property
-    def url(self):
-        return self.driver.current_url
-
     def __collected_items(self) -> List[InventoryItem]:
-        items: List[WebElement] = self.driver.find_elements(*self.inventory_items)
+        items: List[WebElement] = self.find_web_elements(*self.inventory_items)
         return [InventoryItem(item) for item in items]
 
     def get_inventory_item_by_name(self, name: str) -> Union[InventoryItem, None]:
@@ -53,3 +50,6 @@ class InventoryPage(BasePage):
         except IndexError:
             print(f"WARNING: Item with name '{name}' not found in Inventory page.")
             return None
+
+    def get_random_inventory_item(self) -> InventoryItem:
+        return random.choice(self.__collected_items())

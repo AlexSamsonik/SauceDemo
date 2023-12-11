@@ -1,7 +1,7 @@
 from typing import Self
 
 from selenium.webdriver.common.by import By
-from selenium.webdriver.remote.webdriver import WebDriver, WebElement
+from selenium.webdriver.remote.webdriver import WebElement
 
 from pages.base_page import BasePage
 from pages.inventory_page import InventoryPage
@@ -16,9 +16,6 @@ class LoginPage(BasePage):
     password_locator = (By.XPATH, "//*[@id='password']")
     login_button_locator = (By.XPATH, "//*[@id='login-button']")
     error_message_locator = (By.XPATH, "//*[@class='error-message-container error']/h3")
-
-    def __init__(self, driver: WebDriver):
-        super().__init__(driver)
 
     @property
     def username_input(self) -> WebElement:
